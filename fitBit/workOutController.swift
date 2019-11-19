@@ -103,7 +103,54 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         updateUI();
         metersLab.text = "0.00 metres"
         
+        
+        var stmt : OpaquePointer?
+        
+        let insert = "INSERT INTO fitBit (startTime, EndTime,duration,distance) VALUES (?, ?, ?, ?)"
+        
+        if sqlite3_prepare(db, insert, -1, &stmt, nil) != SQLITE_OK {
+            print("ERROR BINDING QUERY")
+        }
+        
+        let first : CLLocation = allLocations.first!
+        let last : CLLocation = allLocations.last!
+        
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date = df.string(from: first.timestamp)
+        if sqlite3_bind_text(stmt, 1, date, -1, nil) != SQLITE_OK{
+            print("Binding value exception")
+        }
+        
+        let df2 = DateFormatter()
+        df2.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let date2 = df2.string(from: last.timestamp)
+        if sqlite3_bind_text(stmt, 2, date2, -1, nil) != SQLITE_OK{
+            print("Binding value exception")
+        }
+        
+        if sqlite3_bind_int(stmt, 3, Int32(time)) != SQLITE_OK{
+            print("Error binding duration")
+        }
+        
+        
+        var distance: CLLocationDistance = 0.0
+        distance = first.distance(from: last)
+        
+        if sqlite3_bind_double(stmt, 4, distance) != SQLITE_OK{
+            print("Error binding duration")
+        }
+        
+        if sqlite3_step(stmt) == SQLITE_DONE{
+            print("Workout succesfully saved !")
+        }else{
+            print("Error writing data to disk !")
+        }
+        
+        
         allLocations.removeAll()
+        test = 0
+        
     }
     
     @objc private func ended(){
@@ -131,14 +178,14 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             secondsLab.text = String(sec)
         }
             
-        if(test > 2){
+        if(test > 1){
             
             if(allLocations.first != nil && allLocations != nil){
                 let first : CLLocation = allLocations.first!
                 let last : CLLocation = allLocations.last!
                 var distance: CLLocationDistance = 0.0
                 distance = first.distance(from: last)
-                //let km = distance/1000
+                
                 metersLab.text = String(format: "%.2f",distance)+" metres"
             }
         }
@@ -148,19 +195,13 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         //print(locations[0])
         
-        if(test > 2){
+        if(test > 1){
             allLocations.append(locations[0])
-            
         }else{
            // allLocations.removeAll()
             test+=1
         }
         
-    }
-    
-    func displaylocate(){
-       
-       
     }
     
     /*
