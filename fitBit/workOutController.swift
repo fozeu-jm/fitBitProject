@@ -19,6 +19,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     var timer = Timer()
     
     /******UI ELEMENTS*********/
+    @IBOutlet weak var metersLab: UITextView!
     @IBOutlet weak var saveBut: UIButton!
     @IBOutlet weak var startBut: UIButton!
     @IBOutlet weak var resumeBut: UIButton!
@@ -27,8 +28,11 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var minutesLab: UITextView!
     @IBOutlet weak var secondsLab: UITextView!
     
-    
     var db : OpaquePointer?
+    var allLocations: Array<CLLocation> = Array()
+    
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         saveBut.isHidden=true
@@ -38,6 +42,8 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         locationManager.requestWhenInUseAuthorization()
         
         loadDB()
+        allLocations.removeAll()
+        allLocations.removeAll()
         
     }
     
@@ -49,12 +55,12 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             print("Error opening file")
         }
         
-        let createTableQuery = "CREATE TABLE IF NOT EXISTS fitbit ( id INTEGER PRIMARY KEY AUTOINCREMENT , startTime DATETIME NOT NULL , EndTime DATETIME NOT NULL , duration INTEGER NOT NULL , distance DOUBLE NOT NULL , locat_id INT NOT NULL)"
+        let createTableQuery = "CREATE TABLE IF NOT EXISTS fitBit ( id INTEGER PRIMARY KEY AUTOINCREMENT , startTime DATETIME NOT NULL , EndTime DATETIME NOT NULL , duration INTEGER NOT NULL , distance DOUBLE NOT NULL)"
         
         if sqlite3_exec(db, createTableQuery, nil, nil, nil) != SQLITE_OK{
             print("Error initialising the file")
         }else{
-            print("Err thhing is OK !")
+            print("File succesfully initialised !")
         }
     }
     
@@ -92,6 +98,9 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
         time=0;
         updateUI();
+        metersLab.text = "0.00 Km"
+        
+        allLocations.removeAll()
     }
     
     @objc private func ended(){
@@ -119,14 +128,23 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             secondsLab.text = String(sec)
         }
         
+        let first : CLLocation = allLocations.first!
+        let last : CLLocation = allLocations.last!
+        var distance: CLLocationDistance = 0.0
+        distance = first.distance(from: last)
+        let km = distance/1000
+        metersLab.text = String(distance)+" m"
         
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        for currentLocation in locations{
-            print("\(String(describing: index)): \(currentLocation)")
-            //
-        }
+        //print(locations[0])
+        allLocations.append(locations[0])
+    }
+    
+    func displaylocate(){
+       
+       
     }
     
     

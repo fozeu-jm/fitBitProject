@@ -99,8 +99,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="55"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="0.00 meters" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="FB0-sF-36c">
-                                <rect key="frame" x="121" y="145" width="173" height="51"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" text="0.00 meters" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="FB0-sF-36c" userLabel="metersLab">
+                                <rect key="frame" x="31" y="145" width="341" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -114,6 +114,7 @@
                     <tabBarItem key="tabBarItem" title="Workout" image="circle.fill" catalog="system" id="QWd-nU-IvD"/>
                     <connections>
                         <outlet property="hoursLab" destination="RSL-3d-kLt" id="ySE-FO-Kja"/>
+                        <outlet property="metersLab" destination="FB0-sF-36c" id="upS-wl-2dL"/>
                         <outlet property="minutesLab" destination="8nN-lc-7sr" id="oP5-TR-T7G"/>
                         <outlet property="resumeBut" destination="ON2-HE-yPU" id="UZ3-pD-I6v"/>
                         <outlet property="saveBut" destination="Nm5-Hs-jpe" id="PM7-KZ-3qd"/>
