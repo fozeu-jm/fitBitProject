@@ -35,18 +35,23 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
         locationManager.requestWhenInUseAuthorization()
         
-        locationManager.startUpdatingLocation()
+        
+        
+        
+        //locationManager.distanceFilter = 100
+        
+        //locationManager.stopUpdatingLocation()
         
     }
     
     @IBAction func chrono_start(_ sender: Any) {
-        print("This is it !!");
         stopBut.isHidden = false;
         /*saveBut.isHidden=false
         resumeBut.isHidden=false*/
         startBut.isHidden=true
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector:#selector(ended), userInfo: nil, repeats: true)
+        locationManager.startUpdatingLocation()
     }
     
     @IBAction func chrono_stop(_ sender: Any) {
@@ -55,6 +60,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         startBut.isHidden=true
         stopBut.isHidden=true
         timer.invalidate();
+        locationManager.stopUpdatingLocation()
     }
     
     @IBAction func resume_chrono(_ sender: Any) {
@@ -62,6 +68,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         saveBut.isHidden = true
         stopBut.isHidden = false
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector:#selector(ended), userInfo: nil, repeats: true)
+        locationManager.startUpdatingLocation()
     }
     
     @IBAction func save_chrono(_ sender: Any) {
@@ -99,6 +106,13 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         }
         
         
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        for currentLocation in locations{
+            print("\(String(describing: index)): \(currentLocation)")
+            //
+        }
     }
     
     
