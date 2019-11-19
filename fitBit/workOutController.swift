@@ -30,6 +30,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     
     var db : OpaquePointer?
     var allLocations: Array<CLLocation> = Array()
+    var test = 0
     
     
     
@@ -41,10 +42,12 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         
-        loadDB()
+        allLocations.removeAll()
+        allLocations.removeAll()
         allLocations.removeAll()
         allLocations.removeAll()
         
+        loadDB()
     }
     
     func loadDB(){
@@ -127,19 +130,32 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         }else{
             secondsLab.text = String(sec)
         }
-        
-        let first : CLLocation = allLocations.first!
-        let last : CLLocation = allLocations.last!
-        var distance: CLLocationDistance = 0.0
-        distance = first.distance(from: last)
-        let km = distance/1000
-        metersLab.text = String(distance)+" m"
+            
+        if(test > 2){
+            
+            if(allLocations.first != nil && allLocations != nil){
+                let first : CLLocation = allLocations.first!
+                let last : CLLocation = allLocations.last!
+                var distance: CLLocationDistance = 0.0
+                distance = first.distance(from: last)
+                //let km = distance/1000
+                metersLab.text = String(distance)+" m"
+            }
+        }
         
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         //print(locations[0])
-        allLocations.append(locations[0])
+        
+        if(test > 2){
+            allLocations.append(locations[0])
+            
+        }else{
+           // allLocations.removeAll()
+            test+=1
+        }
+        
     }
     
     func displaylocate(){
