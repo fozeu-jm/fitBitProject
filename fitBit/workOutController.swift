@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreLocation
+import SQLite3
 
 class workOutController: UIViewController, CLLocationManagerDelegate {
     
@@ -26,22 +27,35 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var minutesLab: UITextView!
     @IBOutlet weak var secondsLab: UITextView!
     
+    
+    var db : OpaquePointer?
     override func viewDidLoad() {
         super.viewDidLoad()
         saveBut.isHidden=true
         resumeBut.isHidden=true
         
         locationManager.delegate = self
-        
         locationManager.requestWhenInUseAuthorization()
         
+        loadDB()
         
+    }
+    
+    func loadDB(){
+        let fileUrl = try!
+            FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("fitbit.sqlite")
         
+        if sqlite3_open(fileUrl.path, &db) != SQLITE_OK{
+            print("Error opening file")
+        }
         
-        //locationManager.distanceFilter = 100
+        let createTableQuery = "CREATE TABLE IF NOT EXISTS fitbit ( id INTEGER PRIMARY KEY AUTOINCREMENT , startTime DATETIME NOT NULL , EndTime DATETIME NOT NULL , duration INTEGER NOT NULL , distance DOUBLE NOT NULL , locat_id INT NOT NULL)"
         
-        //locationManager.stopUpdatingLocation()
-        
+        if sqlite3_exec(db, createTableQuery, nil, nil, nil) != SQLITE_OK{
+            print("Error initialising the file")
+        }else{
+            print("Err thhing is OK !")
+        }
     }
     
     @IBAction func chrono_start(_ sender: Any) {
