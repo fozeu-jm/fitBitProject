@@ -99,8 +99,8 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="55"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" text="0.00 meters" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="FB0-sF-36c" userLabel="metersLab">
-                                <rect key="frame" x="31" y="145" width="341" height="51"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" text="0.00 metres" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="FB0-sF-36c" userLabel="metersLab">
+                                <rect key="frame" x="124" y="140" width="251" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>

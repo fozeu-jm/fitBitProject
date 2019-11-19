@@ -101,7 +101,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
         time=0;
         updateUI();
-        metersLab.text = "0.00 Km"
+        metersLab.text = "0.00 metres"
         
         allLocations.removeAll()
     }
@@ -139,7 +139,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
                 var distance: CLLocationDistance = 0.0
                 distance = first.distance(from: last)
                 //let km = distance/1000
-                metersLab.text = String(distance)+" m"
+                metersLab.text = String(format: "%.2f",distance)+" metres"
             }
         }
         
@@ -162,9 +162,6 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
        
        
     }
-    
-    
-    
     
     /*
     // MARK: - Navigation
