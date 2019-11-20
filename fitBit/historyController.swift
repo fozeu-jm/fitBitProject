@@ -11,14 +11,18 @@ import SQLite3
 
 class historyController: UITableViewController {
     
-    
+    //@IBOutlet var tableView2: UITableView!
     var db : OpaquePointer?
     var sessions: [workoutSession] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        super.tableView.delegate = self
+        super.tableView.dataSource = self
+        
         loadDB()
         sessions = createArray()
+    
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -34,6 +38,8 @@ class historyController: UITableViewController {
         
         if sqlite3_open(fileUrl.path, &db) != SQLITE_OK{
             print("Error opening file")
+        }else{
+           // print("Database connected")
         }
         
     }
@@ -46,6 +52,8 @@ class historyController: UITableViewController {
         
         if sqlite3_prepare(db, select, -1, &stmt2, nil) == SQLITE_OK {
             while sqlite3_step(stmt2) == SQLITE_ROW {
+                
+                //print("Je reviens sur les slides")
                 
                 let date = UnsafePointer<UInt8>(sqlite3_column_text(stmt2, 1))!
                 let begin = String(cString: date)
@@ -76,22 +84,37 @@ class historyController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        return 0
+        return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0
+        return sessions.count
     }
-    /*
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return CGFloat(58)
+    }
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "reuseIdentifier", for: indexPath)
-
-        // Configure the cell...
-
+        let session = sessions[indexPath.row]
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "sessionCell") as! sessionCell
+        cell.setSessionCell(session: session)
         return cell
     }
-    */
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section:Int) -> String?
+    {
+      return "Students"
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        viewDidLoad()
+        super.tableView.reloadData()
+    }
+    
 
     /*
     // Override to support conditional editing of the table view.
