@@ -65,8 +65,13 @@ class historyController: UITableViewController {
                 let distance = sqlite3_column_double(stmt2, 4)
                 let sourlat = sqlite3_column_double(stmt2, 5)
                 let sourlong = sqlite3_column_double(stmt2, 6)
+                
                 let destlat = sqlite3_column_double(stmt2, 7)
                 let destlong = sqlite3_column_double(stmt2, 8)
+                
+                //print("Destination "+String(destlat)+" ----- "+String(destlong))
+                
+                //print("Source "+String(sourLat)+" ----- "+String(sourLong))
                 
                 let session = workoutSession(startTime: begin, endTime: end, duration: duration, distance: distance, sourLat: sourlat, sourLong: sourlong, destLat: destlat, destLong: destlong)
                 tempSessions.append(session)
@@ -115,7 +120,19 @@ class historyController: UITableViewController {
         super.tableView.reloadData()
     }
     
-
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        //let vc = storyboard?.instantiateViewController(withIdentifier: "mapViewController") as? mapViewController
+        let vc = self.tabBarController?.viewControllers![2] as! mapViewController
+        vc.sourLat = sessions[indexPath.row].sourLat
+        vc.sourLong = sessions[indexPath.row].sourLong
+        
+        vc.destLat = sessions[indexPath.row].destLat
+        vc.destLong = sessions[indexPath.row].destLong
+        self.tabBarController?.selectedIndex = 2
+    }
+    
     /*
     // Override to support conditional editing of the table view.
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

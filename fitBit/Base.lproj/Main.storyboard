@@ -264,18 +264,32 @@
         <!--Map-->
         <scene sceneID="YbP-AH-kRK">
             <objects>
-                <viewController id="cF6-y4-oHo" sceneMemberID="viewController">
+                <viewController id="cF6-y4-oHo" customClass="mapViewController" customModule="fitBit" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="k1H-vS-C9c">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="736"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="xDG-g9-IFI">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="687"/>
+                            </mapView>
+                        </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="xDG-g9-IFI" firstAttribute="top" secondItem="k1H-vS-C9c" secondAttribute="top" id="1cD-zh-Bwg"/>
+                            <constraint firstAttribute="trailing" secondItem="xDG-g9-IFI" secondAttribute="trailing" id="T3f-mr-81P"/>
+                            <constraint firstAttribute="bottom" secondItem="xDG-g9-IFI" secondAttribute="bottom" constant="49" id="efB-n5-FKB"/>
+                            <constraint firstItem="xDG-g9-IFI" firstAttribute="leading" secondItem="k1H-vS-C9c" secondAttribute="leading" id="efR-X5-F6C"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="Qw2-yR-Zd1"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="rectangle.fill" catalog="system" id="pZa-0M-hRz"/>
+                    <connections>
+                        <outlet property="mapView" destination="xDG-g9-IFI" id="j0F-Yf-I6t"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wg4-KN-bEw" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1538" y="51"/>
+            <point key="canvasLocation" x="1537.68115942029" y="50.54347826086957"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="tTu-Xv-9fQ">

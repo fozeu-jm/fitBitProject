@@ -49,18 +49,18 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
         loadDB()
         
-        var stmt2 : OpaquePointer?
+        //var stmt2 : OpaquePointer?
         
-        let select = "SELECT * FROM fitBit"
+       // let select = "SELECT * FROM fitBit"
         
-        //let truncate = "DELETE FROM fitBit"
+       // let truncate = "DELETE FROM fitBit"
         
        // let drop2 = "ALTER TABLE fitBit ADD COLUMN sourLat DOUBLE NOT NULL, ADD COLUMN sourLong DOUBLE NOT NULL, ADD COLUMN destLat DOUBLE NOT NULL, ADD COLUMN destLong DOUBLE NOT NULL"
         //let drop = "DROP TABLE IF EXISTS fitBit"
         
-        if sqlite3_prepare(db, select, -1, &stmt2, nil) == SQLITE_OK {
-            
-            while sqlite3_step(stmt2) == SQLITE_ROW {
+        /*if sqlite3_prepare(db, truncate, -1, &stmt2, nil) == SQLITE_OK {
+            sqlite3_step(stmt2)
+            /*while sqlite3_step(stmt2) == SQLITE_ROW {
                 
                 let date = UnsafePointer<UInt8>(sqlite3_column_text(stmt2, 2))!
                 let start = String(cString: date)
@@ -69,10 +69,10 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
                 let sour = sqlite3_column_double(stmt2, 6)
                 
                  print("Date: "+start+" - "+"Duration: "+String(duration)+" - "+"Distance: "+String(distance)+" - "+"sourLat: "+String(sour))
-            }
+            }*/
         }else{
             print(String.init(cString: sqlite3_errmsg(db)))
-        }
+        }*/
         
         
     }
@@ -174,7 +174,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             print("Error binding duration")
         }
         
-        if sqlite3_bind_double(stmt, 7, last.coordinate.longitude) != SQLITE_OK{
+        if sqlite3_bind_double(stmt, 7, last.coordinate.latitude) != SQLITE_OK{
             print("Error binding duration")
         }
         
