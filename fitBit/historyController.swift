@@ -160,7 +160,6 @@ class historyController: UITableViewController {
             tracks.append(track)
         }
         
-            print(tracks.count)
     }
     
     /*
