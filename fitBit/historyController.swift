@@ -14,6 +14,7 @@ class historyController: UITableViewController {
     //@IBOutlet var tableView2: UITableView!
     var db : OpaquePointer?
     var sessions: [workoutSession] = []
+    var tracks : [Track] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -55,6 +56,8 @@ class historyController: UITableViewController {
                 
                 //print("Je reviens sur les slides")
                 
+                let id = sqlite3_column_int(stmt2, 0)
+                
                 let date = UnsafePointer<UInt8>(sqlite3_column_text(stmt2, 1))!
                 let begin = String(cString: date)
                 
@@ -73,7 +76,7 @@ class historyController: UITableViewController {
                 
                 //print("Source "+String(sourLat)+" ----- "+String(sourLong))
                 
-                let session = workoutSession(startTime: begin, endTime: end, duration: duration, distance: distance, sourLat: sourlat, sourLong: sourlong, destLat: destlat, destLong: destlong)
+                let session = workoutSession(id: id, startTime: begin, endTime: end, duration: duration, distance: distance, sourLat: sourlat, sourLong: sourlong, destLat: destlat, destLong: destlong)
                 tempSessions.append(session)
             }
         }else{
@@ -130,7 +133,34 @@ class historyController: UITableViewController {
         
         vc.destLat = sessions[indexPath.row].destLat
         vc.destLong = sessions[indexPath.row].destLong
+        
+        tracks.removeAll()
+        loadTracks(identifier: sessions[indexPath.row].id)
+        
+        vc.tracks = self.tracks
+        
         self.tabBarController?.selectedIndex = 2
+    }
+    
+    func loadTracks(identifier : Int32){
+        var stmt2 : OpaquePointer?
+        let select = "SELECT * FROM tracks WHERE session_id = ?"
+        
+        if sqlite3_prepare(db, select, -1, &stmt2, nil) == SQLITE_OK {
+            
+        }
+        if sqlite3_bind_int(stmt2, 1, identifier) != SQLITE_OK{
+            print("Error binding track")
+        }
+        
+        while sqlite3_step(stmt2) == SQLITE_ROW {
+            let lat = sqlite3_column_double(stmt2, 1)
+            let long = sqlite3_column_double(stmt2, 2)
+            let track = Track(latitude: lat, longitude: long)
+            tracks.append(track)
+        }
+        
+            print(tracks.count)
     }
     
     /*

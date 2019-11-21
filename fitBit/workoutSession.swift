@@ -9,6 +9,8 @@
 import Foundation
 
 class workoutSession {
+    
+    var id : Int32
     var startTime: String
     var endTime: String
     var duration: Int
@@ -18,8 +20,9 @@ class workoutSession {
     var destLat: Double
     var destLong: Double
     
-    init(startTime: String,endTime: String, duration: Int, distance: Double, sourLat: Double, sourLong: Double, destLat: Double, destLong: Double) {
+    init(id : Int32, startTime: String,endTime: String, duration: Int, distance: Double, sourLat: Double, sourLong: Double, destLat: Double, destLong: Double) {
         
+        self.id = id
         self.startTime = startTime
         self.endTime = endTime
         self.duration = duration

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D60CA87E238634A000C0E882 /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = D60CA87D238634A000C0E882 /* Track.swift */; };
 		D6A331C22384E9B3005DA2C4 /* historyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A331C12384E9B3005DA2C4 /* historyController.swift */; };
 		D6A331C42384EE64005DA2C4 /* sessionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A331C32384EE64005DA2C4 /* sessionCell.swift */; };
 		D6A331C62384F235005DA2C4 /* workoutSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A331C52384F235005DA2C4 /* workoutSession.swift */; };
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D60CA87D238634A000C0E882 /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		D6A331C12384E9B3005DA2C4 /* historyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = historyController.swift; sourceTree = "<group>"; };
 		D6A331C32384EE64005DA2C4 /* sessionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sessionCell.swift; sourceTree = "<group>"; };
 		D6A331C52384F235005DA2C4 /* workoutSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = workoutSession.swift; sourceTree = "<group>"; };
@@ -118,6 +120,7 @@
 				D6A331C12384E9B3005DA2C4 /* historyController.swift */,
 				D6A331C32384EE64005DA2C4 /* sessionCell.swift */,
 				D6A331C52384F235005DA2C4 /* workoutSession.swift */,
+				D60CA87D238634A000C0E882 /* Track.swift */,
 			);
 			path = fitBit;
 			sourceTree = "<group>";
@@ -274,6 +277,7 @@
 				D6A331C42384EE64005DA2C4 /* sessionCell.swift in Sources */,
 				D6A8E3D62371CE7900A2A861 /* mapViewController.swift in Sources */,
 				D6A8E4022371D56F00A2A861 /* workOutController.swift in Sources */,
+				D60CA87E238634A000C0E882 /* Track.swift in Sources */,
 				D6A8E3D22371CE7900A2A861 /* AppDelegate.swift in Sources */,
 				D6A331C22384E9B3005DA2C4 /* historyController.swift in Sources */,
 				D6A8E3D42371CE7900A2A861 /* SceneDelegate.swift in Sources */,

@@ -27,6 +27,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     @IBOutlet weak var hoursLab: UITextView!
     @IBOutlet weak var minutesLab: UITextView!
     @IBOutlet weak var secondsLab: UITextView!
+    @IBOutlet weak var cancelBut: UIButton!
     
     var db : OpaquePointer?
     var allLocations: Array<CLLocation> = Array()
@@ -87,11 +88,22 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
         let createTableQuery = "CREATE TABLE IF NOT EXISTS fitBit ( id INTEGER PRIMARY KEY AUTOINCREMENT , startTime DATETIME NOT NULL , EndTime DATETIME NOT NULL , duration INTEGER NOT NULL , distance DOUBLE NOT NULL, sourLat  DOUBLE NOT NULL, sourLong DOUBLE NOT NULL, destLat DOUBLE NOT NULL, destLong DOUBLE NOT NULL)"
         
+        let createTrack = "CREATE TABLE IF NOT EXISTS tracks (session_id INTEGER, latitude DOUBLE NOT NULL, longitude DOUBLE NOT NULL)"
+        
+        
         if sqlite3_exec(db, createTableQuery, nil, nil, nil) != SQLITE_OK{
             print("Error initialising the file")
         }else{
-            print("File succesfully initialised !")
+            print("Sessions File succesfully initialised !")
         }
+        
+        if sqlite3_exec(db, createTrack, nil, nil, nil) != SQLITE_OK{
+            print("Error initialising the file")
+        }else{
+            print("Track File succesfully initialised !")
+        }
+       
+        
     }
     
     @IBAction func chrono_start(_ sender: Any) {
@@ -102,11 +114,13 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector:#selector(ended), userInfo: nil, repeats: true)
         locationManager.startUpdatingLocation()
+        locationManager.distanceFilter = 10
     }
     
     @IBAction func chrono_stop(_ sender: Any) {
         saveBut.isHidden=false
         resumeBut.isHidden=false
+        cancelBut.isHidden=false
         startBut.isHidden=true
         stopBut.isHidden=true
         timer.invalidate();
@@ -116,18 +130,63 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     @IBAction func resume_chrono(_ sender: Any) {
         resumeBut.isHidden = true
         saveBut.isHidden = true
+        cancelBut.isHidden = true
         stopBut.isHidden = false
         timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector:#selector(ended), userInfo: nil, repeats: true)
         locationManager.startUpdatingLocation()
     }
     
+    func saveTracks(lastInserted : Int32 ){
+        var stmt : OpaquePointer?
+               
+        let insert = "INSERT INTO tracks (session_id, latitude, longitude) VALUES (?, ?, ?)"
+        
+        
+        for location in allLocations{
+            
+            if sqlite3_prepare(db, insert, -1, &stmt, nil) != SQLITE_OK {
+                print("ERROR BINDING QUERY")
+            }
+            
+            if sqlite3_bind_int(stmt, 1, lastInserted) != SQLITE_OK{
+                print("Error binding track")
+            }
+            
+            if sqlite3_bind_double(stmt, 2, location.coordinate.latitude) != SQLITE_OK{
+                print("Error binding track")
+            }
+            
+            if sqlite3_bind_double(stmt, 3, location.coordinate.longitude) != SQLITE_OK{
+                print("Error binding track")
+            }
+            
+            if sqlite3_step(stmt) == SQLITE_DONE{
+                print("Track saved sucessfully ! !")
+            }else{
+                print(String.init(cString: sqlite3_errmsg(db)))
+            }
+            
+        }
+        
+    }
+    
+    @IBAction func cancel_chrono(_ sender: Any) {
+        saveBut.isHidden = true
+        resumeBut.isHidden = true
+        cancelBut.isHidden = true
+        cancelBut.isHidden=true
+        startBut.isHidden=false
+        time=0;
+        updateUI();
+        metersLab.text = "0.00 metres"
+        allLocations.removeAll()
+        test = 0
+    }
     @IBAction func save_chrono(_ sender: Any) {
         saveBut.isHidden = true
         resumeBut.isHidden = true
+        cancelBut.isHidden = true
         startBut.isHidden=false
-        
-        
-        
         
         var stmt : OpaquePointer?
         
@@ -188,12 +247,33 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             print("Error writing data to disk !")
         }
         
+        let lastId = "SELECT last_insert_rowid()"
+        if sqlite3_prepare(db, lastId, -1, &stmt, nil) != SQLITE_OK {
+            print("ERROR BINDING QUERY")
+        }
+        var lastInsert : Int32
+        while sqlite3_step(stmt) == SQLITE_ROW {
+            lastInsert = sqlite3_column_int(stmt, 0)
+            print(lastInsert)
+            saveTracks(lastInserted: lastInsert)
+        }
         
         time=0;
         updateUI();
         metersLab.text = "0.00 metres"
         allLocations.removeAll()
         test = 0
+        
+    }
+    
+    func displayTrack(){
+        var tracks : [Track] = []
+        
+        for location in allLocations{
+            let track = Track(latitude: location.coordinate.latitude,longitude: location.coordinate.longitude)
+            tracks.append(track)
+        }
+        
         
     }
     
@@ -241,6 +321,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
         if(test > 1){
             allLocations.append(locations[0])
+            print(locations[0])
         }else{
            // allLocations.removeAll()
             test+=1
