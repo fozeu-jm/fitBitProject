@@ -60,7 +60,7 @@
                                 </connections>
                             </button>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="0" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="RSL-3d-kLt">
-                                <rect key="frame" x="101" y="53" width="48" height="82"/>
+                                <rect key="frame" x="91" y="53" width="48" height="82"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -68,7 +68,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="00" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="8nN-lc-7sr">
-                                <rect key="frame" x="159" y="53" width="83" height="82"/>
+                                <rect key="frame" x="149" y="53" width="83" height="82"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -76,7 +76,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="00" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="QGN-rb-GPT">
-                                <rect key="frame" x="245" y="53" width="86" height="82"/>
+                                <rect key="frame" x="235" y="53" width="86" height="82"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -84,7 +84,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text=":" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="GMK-QR-tY2">
-                                <rect key="frame" x="139" y="50" width="20" height="82"/>
+                                <rect key="frame" x="129" y="50" width="20" height="82"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -92,7 +92,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text=":" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="DQb-qo-Hib">
-                                <rect key="frame" x="229" y="50" width="20" height="82"/>
+                                <rect key="frame" x="219" y="50" width="20" height="82"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -100,7 +100,7 @@
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" text="0.00 metres" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="FB0-sF-36c" userLabel="metersLab">
-                                <rect key="frame" x="124" y="140" width="251" height="51"/>
+                                <rect key="frame" x="114" y="140" width="251" height="51"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                 <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>

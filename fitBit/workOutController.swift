@@ -161,7 +161,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             }
             
             if sqlite3_step(stmt) == SQLITE_DONE{
-                print("Track saved sucessfully ! !")
+                //print("Track saved sucessfully ! !")
             }else{
                 print(String.init(cString: sqlite3_errmsg(db)))
             }
@@ -261,20 +261,29 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         time=0;
         updateUI();
         metersLab.text = "0.00 metres"
+        displayTrack()
         allLocations.removeAll()
         test = 0
+        self.tabBarController?.selectedIndex = 2
         
     }
     
     func displayTrack(){
         var tracks : [Track] = []
         
+        let first = allLocations.first
+        let last = allLocations.last
+        
         for location in allLocations{
             let track = Track(latitude: location.coordinate.latitude,longitude: location.coordinate.longitude)
             tracks.append(track)
         }
-        
-        
+        let vc = self.tabBarController?.viewControllers![2] as! mapViewController
+        vc.sourLat = (first?.coordinate.latitude)!
+        vc.sourLong = (first?.coordinate.longitude)!
+        vc.destLat = (last?.coordinate.latitude)!
+        vc.destLong = (last?.coordinate.longitude)!
+        vc.tracks = tracks
     }
     
     @objc private func ended(){
@@ -321,7 +330,6 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
         if(test > 1){
             allLocations.append(locations[0])
-            print(locations[0])
         }else{
            // allLocations.removeAll()
             test+=1
