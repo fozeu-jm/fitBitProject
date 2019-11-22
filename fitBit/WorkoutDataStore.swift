@@ -22,12 +22,12 @@ class WorkoutDataStore {
       //3. Combine the predicates into a single predicate.
       //let compound = NSCompoundPredicate(andPredicateWithSubpredicates: [workoutPredicate,sourcePredicate])
         
-      //let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,ascending: true)
+      let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate,ascending: true)
             
       let query = HKSampleQuery(sampleType: HKObjectType.workoutType(),
                                 predicate: sourcePredicate,
                                 limit: 0,
-                                sortDescriptors: nil) { (query, samples, error) in
+                                sortDescriptors: [sortDescriptor]) { (query, samples, error) in
 
         DispatchQueue.main.async {
             

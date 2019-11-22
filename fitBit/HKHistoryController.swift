@@ -15,9 +15,12 @@ class HKHistoryController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        readSessions()
         super.tableView.delegate = self
         super.tableView.dataSource = self
-        readSessions()
+        
+        
+        
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
 
@@ -29,11 +32,20 @@ class HKHistoryController: UITableViewController {
         WorkoutDataStore.loadPrancerciseWorkouts { ( collection, error) in
             
             for work in collection!{
-                var id = 12
-                var start = work.startDate
-                var stop = work.endDate
-                var duration = Int(work.duration) 
+                let id = 12
+                let df = DateFormatter()
+                df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                let start = work.startDate
+                let stop = work.endDate
                 
+                let begin = df.string(from: start)
+                let end = df.string(from: stop)
+                let duration = Int(work.duration)
+                let distance : Double = (work.totalDistance?.doubleValue(for: HKUnit.meter()))!
+                let session = workoutSession(id: Int32(id), startTime: begin, endTime: end, duration: duration, distance: distance, sourLat: 0, sourLong: 0, destLat: 0, destLong: 0)
+                
+                self.sessions.append(session)
+                super.tableView.reloadData()
             }
         }
     }
@@ -47,11 +59,22 @@ class HKHistoryController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 0 //count
+        print(self.sessions)
+        return self.sessions.count //count
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return CGFloat(58)
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("populate !")
+        let session = sessions[indexPath.row]
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "HKCell") as! HKCell
+        cell.setSessionCell(session: session)
+        return cell
     }
 
     /*

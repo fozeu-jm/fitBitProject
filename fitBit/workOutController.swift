@@ -90,9 +90,11 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         let startTime = df.date(from: workout.startTime)
         let endTime = df.date(from: workout.endTime)
         
-        let hours2 : Double = Double(workout.duration / (60*60))
-        let caloriesperHour : Double = 450
-        let totalCaloriesBurnt : Double = hours2 * caloriesperHour
+
+        let hours2 : Double = Double(workout.duration)/3600.0
+        let caloriesperHour : Double = 480
+        let totalCaloriesBurnt : Double = hours2*caloriesperHour
+        print("Calories bruler"+String(totalCaloriesBurnt))
         let unit = HKUnit.kilocalorie()
         let quantity = HKQuantity(unit: unit, doubleValue: totalCaloriesBurnt)
         let workoutObject = HKWorkout(activityType: HKWorkoutActivityType.running, start: startTime!, end: endTime!, duration: TimeInterval(workout.duration), totalEnergyBurned: quantity, totalDistance: distanceQuantity, metadata: nil)
