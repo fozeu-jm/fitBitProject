@@ -9,6 +9,7 @@
 import UIKit
 import CoreLocation
 import SQLite3
+import HealthKit
 
 class workOutController: UIViewController, CLLocationManagerDelegate {
     
@@ -17,7 +18,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     
     var time: Int = 0
     var timer = Timer()
-    
+    var healthStore = HKHealthStore()
     /******UI ELEMENTS*********/
     @IBOutlet weak var metersLab: UITextView!
     @IBOutlet weak var saveBut: UIButton!
@@ -48,6 +49,9 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         allLocations.removeAll()
         allLocations.removeAll()
         
+        authorizeHealthKit()
+        
+        
         loadDB()
         
         //var stmt2 : OpaquePointer?
@@ -75,6 +79,60 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             print(String.init(cString: sqlite3_errmsg(db)))
         }*/
         
+        
+    }
+    
+    func saveWorkoutToHealthKit(_ workout: workoutSession) {
+        let distanceQuantity = HKQuantity(unit: HKUnit.meter(), doubleValue: workout.distance)
+        
+        let df = DateFormatter()
+        df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let startTime = df.date(from: workout.startTime)
+        let endTime = df.date(from: workout.endTime)
+        
+        let hours2 : Double = Double(workout.duration / (60*60))
+        let caloriesperHour : Double = 450
+        let totalCaloriesBurnt : Double = hours2 * caloriesperHour
+        let unit = HKUnit.kilocalorie()
+        let quantity = HKQuantity(unit: unit, doubleValue: totalCaloriesBurnt)
+        let workoutObject = HKWorkout(activityType: HKWorkoutActivityType.running, start: startTime!, end: endTime!, duration: TimeInterval(workout.duration), totalEnergyBurned: quantity, totalDistance: distanceQuantity, metadata: nil)
+        
+        healthStore.save(workoutObject, withCompletion: { (completed, error) in
+            if let error = error {
+                print("Error creating workout")
+                
+            } else {
+                self.addSamples(hkWorkout: workoutObject, workoutData: workout)
+                
+            }
+        })
+        
+    }
+    
+    func addSamples(hkWorkout: HKWorkout, workoutData: workoutSession) {
+        var samples = [HKSample]()
+        guard let runningDistanceType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.distanceWalkingRunning) else { return }
+        let distanceUnit = HKUnit.meter()
+        let distanceQuantity = HKQuantity(unit: distanceUnit, doubleValue: workoutData.distance)
+        
+        let df = DateFormatter()
+       df.dateFormat = "yyyy-MM-dd HH:mm:ss"
+       let startTime = df.date(from: workoutData.startTime)
+       let endTime = df.date(from: workoutData.endTime)
+        
+        let distanceSample = HKQuantitySample(type: runningDistanceType, quantity: distanceQuantity, start: startTime!, end: endTime!)
+        samples.append(distanceSample)
+        
+        healthStore.add(samples, to: hkWorkout, completion: { (completed, error) in
+            if let error = error {
+                print("Error adding workout samples")
+                
+            } else {
+                print("Workout samples added successfully")
+                
+            }
+            
+        })
         
     }
     
@@ -170,6 +228,25 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
     }
     
+    private func authorizeHealthKit() {
+      HealthKitSetupAssistant.authorizeHealthKit { (authorized, error) in
+
+          guard authorized else {
+              let baseMessage = "HealthKit Authorization Failed"
+
+              if let error = error {
+                  print("\(baseMessage). Reason: \(error.localizedDescription)")
+              } else {
+                  print(baseMessage)
+              }
+
+              return
+          }
+
+          print("HealthKit Successfully Authorized.")
+      }
+    }
+    
     @IBAction func cancel_chrono(_ sender: Any) {
         saveBut.isHidden = true
         resumeBut.isHidden = true
@@ -202,6 +279,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         let df = DateFormatter()
         df.dateFormat = "yyyy-MM-dd HH:mm:ss"
         let date = df.string(from: first.timestamp)
+       
         if sqlite3_bind_text(stmt, 1, date, -1, nil) != SQLITE_OK{
             print("Binding value exception")
         }
@@ -225,6 +303,8 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             print("Error binding duration")
         }
         
+        
+        
         if sqlite3_bind_double(stmt, 5, first.coordinate.latitude) != SQLITE_OK{
             print("Error binding duration")
         }
@@ -240,6 +320,8 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         if sqlite3_bind_double(stmt, 8, last.coordinate.longitude) != SQLITE_OK{
             print("Error binding duration")
         }
+        
+       
         
         if sqlite3_step(stmt) == SQLITE_DONE{
             print("Workout succesfully saved !")
@@ -257,14 +339,15 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             print(lastInsert)
             saveTracks(lastInserted: lastInsert)
         }
-        
+         let workout = workoutSession(id: 12,startTime: date,endTime: date2,duration: time,distance: distance,sourLat: first.coordinate.latitude,sourLong: first.coordinate.longitude,destLat: last.coordinate.latitude,destLong: last.coordinate.longitude)
+        saveWorkoutToHealthKit(workout)
         time=0;
         updateUI();
         metersLab.text = "0.00 metres"
         displayTrack()
         allLocations.removeAll()
         test = 0
-        self.tabBarController?.selectedIndex = 2
+        self.tabBarController?.selectedIndex = 3
         
     }
     
@@ -278,7 +361,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             let track = Track(latitude: location.coordinate.latitude,longitude: location.coordinate.longitude)
             tracks.append(track)
         }
-        let vc = self.tabBarController?.viewControllers![2] as! mapViewController
+        let vc = self.tabBarController?.viewControllers![3] as! mapViewController
         vc.sourLat = (first?.coordinate.latitude)!
         vc.sourLong = (first?.coordinate.longitude)!
         vc.destLat = (last?.coordinate.latitude)!

@@ -12,10 +12,11 @@ class sessionCell: UITableViewCell {
     
     @IBOutlet weak var dateLab: UILabel!
     @IBOutlet weak var distanceLab: UILabel!
-    
     @IBOutlet weak var hourLab: UILabel!
     @IBOutlet weak var minsLab: UILabel!
     @IBOutlet weak var secLab: UILabel!
+    
+    
     @IBOutlet weak var sourLat: UILabel!
     @IBOutlet weak var sourLong: UILabel!
     @IBOutlet weak var destLat: UILabel!

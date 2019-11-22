@@ -43,6 +43,10 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>For saving your health data to on Healthkit repository</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>For saving your health data to on Healthkit repository</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Location required to keep track of user movements....</string>
 	<key>UIRequiredDeviceCapabilities</key>

@@ -112,11 +112,6 @@ class historyController: UITableViewController {
         return cell
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section:Int) -> String?
-    {
-      return "Students"
-    }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         viewDidLoad()
@@ -127,7 +122,7 @@ class historyController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         //let vc = storyboard?.instantiateViewController(withIdentifier: "mapViewController") as? mapViewController
-        let vc = self.tabBarController?.viewControllers![2] as! mapViewController
+        let vc = self.tabBarController?.viewControllers![3] as! mapViewController
         vc.sourLat = sessions[indexPath.row].sourLat
         vc.sourLong = sessions[indexPath.row].sourLong
         
@@ -139,7 +134,7 @@ class historyController: UITableViewController {
         
         vc.tracks = self.tracks
         
-        self.tabBarController?.selectedIndex = 2
+        self.tabBarController?.selectedIndex = 3
     }
     
     func loadTracks(identifier : Int32){
