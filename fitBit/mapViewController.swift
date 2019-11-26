@@ -9,20 +9,6 @@
 import UIKit
 import MapKit
 
-class customPin: NSObject, MKAnnotation{
-    var coordinate: CLLocationCoordinate2D
-    var title: String?
-    var subtitle: String?
-    
-    init(pinTitle:String, pinSubTitle:String, location:CLLocationCoordinate2D) {
-        self.title = pinTitle
-        self.subtitle = pinSubTitle
-        self.coordinate = location
-    }
-}
-
-
-
 class mapViewController: UIViewController, MKMapViewDelegate {
 
     @IBOutlet weak var mapView: MKMapView!
@@ -66,7 +52,9 @@ class mapViewController: UIViewController, MKMapViewDelegate {
                for track in tracks{
                    let x = CLLocationDegrees(track.latitude)
                    let y = CLLocationDegrees(track.longitude)
-                   
+                   print(String(track.longitude)+", "+String(track.latitude))
+                
+                
                    pointsToUse += [CLLocationCoordinate2DMake(x, y)]
                    
                    if i > 0{

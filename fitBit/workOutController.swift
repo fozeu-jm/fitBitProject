@@ -33,7 +33,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     var db : OpaquePointer?
     var allLocations: Array<CLLocation> = Array()
     var test = 0
-    
+    var tracks : [Track] = []
     
     
     override func viewDidLoad() {
@@ -54,30 +54,37 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         
         loadDB()
         
-        //var stmt2 : OpaquePointer?
+        var stmt2 : OpaquePointer?
         
-       // let select = "SELECT * FROM fitBit"
+        let select = "SELECT * FROM fitBit"
         
        // let truncate = "DELETE FROM fitBit"
         
        // let drop2 = "ALTER TABLE fitBit ADD COLUMN sourLat DOUBLE NOT NULL, ADD COLUMN sourLong DOUBLE NOT NULL, ADD COLUMN destLat DOUBLE NOT NULL, ADD COLUMN destLong DOUBLE NOT NULL"
         //let drop = "DROP TABLE IF EXISTS fitBit"
-        
-        /*if sqlite3_prepare(db, truncate, -1, &stmt2, nil) == SQLITE_OK {
-            sqlite3_step(stmt2)
-            /*while sqlite3_step(stmt2) == SQLITE_ROW {
-                
+        if sqlite3_prepare(db, select, -1, &stmt2, nil) == SQLITE_OK {
+            //sqlite3_step(stmt2)
+            var id = Int32(-1)
+            while sqlite3_step(stmt2) == SQLITE_ROW {
+                    id =  sqlite3_column_int(stmt2, 0)
                 let date = UnsafePointer<UInt8>(sqlite3_column_text(stmt2, 2))!
                 let start = String(cString: date)
                 let duration = sqlite3_column_int(stmt2, 3)
                 let distance = sqlite3_column_double(stmt2, 4)
                 let sour = sqlite3_column_double(stmt2, 6)
-                
-                 print("Date: "+start+" - "+"Duration: "+String(duration)+" - "+"Distance: "+String(distance)+" - "+"sourLat: "+String(sour))
-            }*/
+                print("Date: "+start+" - "+"Duration: "+String(duration)+" - "+"Distance: "+String(distance)+" - "+"sourLat: "+String(sour));
+            }
+            loadTracks(identifier: id)
+            let vc = self.tabBarController?.viewControllers![3] as! mapViewController
+            vc.sourLat = (tracks.first?.latitude)!
+            vc.sourLong = (tracks.first?.longitude)!
+            vc.destLat = (tracks.last?.latitude)!
+            vc.destLong = (tracks.last?.longitude)!
+            vc.tracks = tracks
+            
         }else{
             print(String.init(cString: sqlite3_errmsg(db)))
-        }*/
+        }
         
         
     }
@@ -165,6 +172,27 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
        
         
     }
+    
+    func loadTracks(identifier : Int32){
+           var stmt2 : OpaquePointer?
+           let select = "SELECT * FROM tracks WHERE session_id = ?"
+           
+           if sqlite3_prepare(db, select, -1, &stmt2, nil) == SQLITE_OK {
+               
+           }
+           if sqlite3_bind_int(stmt2, 1, identifier) != SQLITE_OK{
+               print("Error binding track")
+           }
+           
+           while sqlite3_step(stmt2) == SQLITE_ROW {
+               let lat = sqlite3_column_double(stmt2, 1)
+               let long = sqlite3_column_double(stmt2, 2)
+               let track = Track(latitude: lat, longitude: long)
+               tracks.append(track)
+           }
+           
+       }
+       
     
     @IBAction func chrono_start(_ sender: Any) {
         stopBut.isHidden = false;
