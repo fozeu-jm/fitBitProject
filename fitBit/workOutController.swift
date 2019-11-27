@@ -76,10 +76,10 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             }
             loadTracks(identifier: id)
             let vc = self.tabBarController?.viewControllers![3] as! mapViewController
-            vc.sourLat = (tracks.first?.latitude)!
-            vc.sourLong = (tracks.first?.longitude)!
-            vc.destLat = (tracks.last?.latitude)!
-            vc.destLong = (tracks.last?.longitude)!
+            vc.sourLat = (tracks.first?.latitude ?? 0.0)
+            vc.sourLong = (tracks.first?.longitude ?? 0.0)
+            vc.destLat = (tracks.last?.latitude ?? 0.0)
+            vc.destLong = (tracks.last?.longitude ?? 0.0)
             vc.tracks = tracks
             
         }else{
