@@ -34,6 +34,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
     var allLocations: Array<CLLocation> = Array()
     var test = 0
     var tracks : [Track] = []
+    var lastDistance : Double = 0.0
     
     
     override func viewDidLoad() {
@@ -329,7 +330,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         var distance: CLLocationDistance = 0.0
         distance = first.distance(from: last)
         
-        if sqlite3_bind_double(stmt, 4, distance) != SQLITE_OK{
+        if sqlite3_bind_double(stmt, 4, lastDistance) != SQLITE_OK{
             print("Error binding duration")
         }
         
@@ -369,7 +370,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
             print(lastInsert)
             saveTracks(lastInserted: lastInsert)
         }
-         let workout = workoutSession(id: 12,startTime: date,endTime: date2,duration: time,distance: distance,sourLat: first.coordinate.latitude,sourLong: first.coordinate.longitude,destLat: last.coordinate.latitude,destLong: last.coordinate.longitude)
+         let workout = workoutSession(id: 12,startTime: date,endTime: date2,duration: time,distance: lastDistance,sourLat: first.coordinate.latitude,sourLong: first.coordinate.longitude,destLat: last.coordinate.latitude,destLong: last.coordinate.longitude)
         saveWorkoutToHealthKit(workout)
         time=0;
         updateUI();
@@ -432,7 +433,7 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
                 var distance: CLLocationDistance = 0.0
                 distance = first.distance(from: last)
                 
-                metersLab.text = String(format: "%.2f",distance)+" metres"
+                metersLab.text = String(format: "%.2f",lastDistance)+" metres"
             }
         }
         
@@ -442,7 +443,14 @@ class workOutController: UIViewController, CLLocationManagerDelegate {
         //print(locations[0])
         
         if(test > 1){
+            
             allLocations.append(locations[0])
+            if(allLocations.count >  2){
+                let p0 = allLocations[allLocations.count - 2]
+                let p1 = allLocations[allLocations.count - 1]
+                let currentdist = p0.distance(from: p1)
+                lastDistance += currentdist
+            }
         }else{
            // allLocations.removeAll()
             test+=1
