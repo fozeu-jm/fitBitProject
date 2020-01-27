@@ -38,7 +38,7 @@ class historyController: UITableViewController {
             FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("fitbit.sqlite")
         
         if sqlite3_open(fileUrl.path, &db) != SQLITE_OK{
-            print("Error opening file")
+            print("Error opening files")
         }else{
            // print("Database connected")
         }
